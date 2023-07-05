@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import JSONResponse
 import openai
@@ -55,7 +56,7 @@ async def upload_audio(file: UploadFile = File(...), language: str = Form("Engli
                 {"role": "user", "content": f'Translate the following text to "{language}": "{transcript.text}"'}]
         )
         response = {"transcribe": transcript.text,
-                    "translate": translate['choices'][0]['message']['content']}
+                    "translate": translate['choices'][0]['message'].get("content")}
         return JSONResponse(status_code=200, content=response)
     except Exception as e:
         error_message = str(e)
